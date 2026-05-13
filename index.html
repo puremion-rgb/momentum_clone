@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>모멘텀 클론</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .container {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-40px);
+      }
+
+      .center {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      h2 {
+        color: rgb(255, 255, 254);
+        font-size: 50px;
+        text-align: center;
+        font-weight: 500;
+        margin-bottom: 0;
+      }
+
+      h3 {
+        color: rgb(255, 255, 254);
+        font-size: 35px;
+        text-align: center;
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+
+      h4 {
+        color: rgb(255, 255, 254);
+        font-size: 16px;
+        text-align: center;
+      }
+
+      p {
+        height: 20px;
+        color: rgb(255, 255, 254);
+        text-align: center;
+        font-size: 150px;
+        font-weight: 500;
+      }
+
+      #goalInput {
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid white;
+        outline: none;
+        color: white;
+        font-size: 30px;
+        text-align: center;
+        width: 550px;
+        display: block;
+        margin-top: 0;
+      }
+
+      #goalInput::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      #randomText {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        font-weight: 400;
+        margin-bottom: 10px;
+      }
+
+      .nameLine {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      #nameInput {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+        outline: none;
+        color: white;
+        font-size: 30px;
+        width: 150px;
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      #nameInput::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      #hello {
+        margin-bottom: 30px;
+      }
+
+      #today {
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="center">
+        <p id="nowTime"></p>
+        <div class="nameLine">
+          <h2 id="hello"></h2>
+          <input id="nameInput" type="text" placeholder="" />
+        </div>
+        <h3 id="today"></h3>
+        <input id="goalInput" type="text" placeholder="" />
+        <h4 id="randomText"></h4>
+      </div>
+    </div>
+
+    <script>
+      let nowTime = document.getElementById("nowTime");
+      let hello = document.getElementById("hello");
+      let today = document.getElementById("today");
+      today.innerText = "What is your main goal for today?";
+
+      let randomText = document.getElementById("randomText");
+
+      let messages = [
+        `"순간들을 소중히 여기다 보면 긴 세월은 저절로 흘러간다."`,
+        `"우리 모두는 인생에서 만회할 기회라 할 수 있는 큰 변화를 경험한다."`,
+        `"도전은 인생을 흥미롭게 만들며 도전의 극복이 인생을 의미있게 한다."`,
+        `"지나간 슬픔에 새로운 눈물을 낭비하지 말라."`,
+        `"성공은 열심히 노력하며 기다리는 사람에게 찾아온다."`,
+        `"때로는 살아있는 것조차도 용기가 될 때가 있다."`,
+        `"겨울이 없다면 봄은 그리 즐겁지 않을 것이다 고난을 맛보지 않으면 성공이 반갑지 않을 것이다."`,
+      ];
+
+      let randomIndex = Math.floor(Math.random() * messages.length);
+      randomText.innerText = messages[randomIndex];
+
+      let images = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg"];
+      let randomBg = Math.floor(Math.random() * images.length);
+      document.body.style.backgroundImage = `url("${images[randomBg]}")`;
+
+      function clock() {
+        let date = new Date();
+
+        let hour = date.getHours();
+        let displayHour = hour % 12 || 12;
+
+        let hours = String(displayHour);
+        let minutes = String(date.getMinutes()).padStart(2, "0");
+
+        nowTime.innerText = `${hours}:${minutes}`;
+
+        if (hour >= 5 && hour < 12) {
+          hello.innerText = "Good Morning,";
+        } else if (hour >= 12 && hour < 18) {
+          hello.innerText = "Good Afternoon,";
+        } else if (hour >= 18 && hour < 22) {
+          hello.innerText = "Good Evening,";
+        } else {
+          hello.innerText = "Good Night,";
+        }
+      }
+      clock();
+      setInterval(clock, 1000);
+    </script>
+  </body>
+</html>
