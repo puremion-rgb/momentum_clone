@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>모멘텀 클론</title>
+
     <style>
       html,
       body {
@@ -20,44 +21,111 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        transform: translateY(-40px);
       }
 
       .center {
-        text-align: center;
+        width: 100%;
+        max-width: 600px;
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        align-items: center;
+        gap: 14px;
+        transform: translateY(40px);
       }
 
-      h2 {
-        color: rgb(255, 255, 254);
-        font-size: 50px;
+      #nowTime {
+        font-size: 150px;
+        line-height: 1;
+        margin: 0;
         text-align: center;
         font-weight: 500;
-        margin-bottom: 0;
+      }
+
+      .nameLine {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+        height: 60px;
+      }
+
+      #hello,
+      #nameInput,
+      #nameText {
+        display: flex;
+        align-items: center;
+        height: 60px;
+        font-size: 50px;
+        font-weight: 500;
+        line-height: 1;
+        color: white;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      #nameInput {
+        width: 160px;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+        outline: none;
+        text-align: left;
+      }
+
+      #nameText {
+        width: 160px;
+        justify-content: flex-start;
+        cursor: pointer;
+      }
+
+      #nameInput.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      h3,
+      h4 {
+        color: white;
+        text-align: center;
+        margin: 0;
       }
 
       h3 {
-        color: rgb(255, 255, 254);
         font-size: 35px;
-        text-align: center;
         font-weight: 400;
-        margin-bottom: 0;
       }
 
       h4 {
-        color: rgb(255, 255, 254);
         font-size: 16px;
-        text-align: center;
+        font-weight: 400;
       }
 
-      p {
-        height: 20px;
-        color: rgb(255, 255, 254);
-        text-align: center;
-        font-size: 150px;
-        font-weight: 500;
+      #today {
+        margin-top: 50px;
+      }
+
+      .goalWrap {
+        position: relative;
+        width: 550px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+      }
+
+      #goalInput,
+      #goalText {
+        position: absolute;
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        color: white;
+        margin: 0;
+        padding: 0;
       }
 
       #goalInput {
@@ -65,16 +133,12 @@
         border: none;
         border-bottom: 2px solid white;
         outline: none;
-        color: white;
-        font-size: 30px;
         text-align: center;
-        width: 550px;
-        display: block;
-        margin-top: 0;
       }
 
-      #goalInput::placeholder {
-        color: rgba(255, 255, 255, 0.6);
+      #goalInput.hidden {
+        opacity: 0;
+        pointer-events: none;
       }
 
       #randomText {
@@ -82,102 +146,177 @@
         bottom: 30px;
         left: 50%;
         transform: translateX(-50%);
-        white-space: nowrap;
-        font-weight: 400;
-        margin-bottom: 10px;
-      }
-
-      .nameLine {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      #nameInput {
-        background: transparent;
-        border: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.8);
-        outline: none;
+        margin: 0;
         color: white;
-        font-size: 30px;
-        width: 150px;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+
+      p {
+        margin: 0;
+        color: white;
         text-align: center;
-        margin-top: 20px;
-      }
-
-      #nameInput::placeholder {
-        color: rgba(255, 255, 255, 0.6);
-      }
-
-      #hello {
-        margin-bottom: 30px;
-      }
-
-      #today {
-        margin-top: 30px;
       }
     </style>
   </head>
+
   <body>
     <div class="container">
       <div class="center">
         <p id="nowTime"></p>
+
         <div class="nameLine">
           <h2 id="hello"></h2>
-          <input id="nameInput" type="text" placeholder="" />
+          <input id="nameInput" type="text" />
+          <div id="nameText"></div>
         </div>
+
         <h3 id="today"></h3>
-        <input id="goalInput" type="text" placeholder="" />
-        <h4 id="randomText"></h4>
+
+        <div class="goalWrap">
+          <input id="goalInput" type="text" />
+          <div id="goalText"></div>
+        </div>
       </div>
     </div>
 
+    <h4 id="randomText"></h4>
+
+    <input type="text" id="todoInput" />
+    <p id="todoText" style="color: white"></p>
     <script>
-      let nowTime = document.getElementById("nowTime");
-      let hello = document.getElementById("hello");
-      let today = document.getElementById("today");
+      const nowTime = document.getElementById("nowTime");
+      const hello = document.getElementById("hello");
+      const today = document.getElementById("today");
+      const randomText = document.getElementById("randomText");
+
+      const nameInput = document.getElementById("nameInput");
+      const nameText = document.getElementById("nameText");
+
+      const goalInput = document.getElementById("goalInput");
+      const goalText = document.getElementById("goalText");
+
+      const todoInput = document.getElementById("todoInput");
+      const todoText = document.getElementById("todoText");
+
       today.innerText = "What is your main goal for today?";
 
-      let randomText = document.getElementById("randomText");
-
-      let messages = [
-        `"순간들을 소중히 여기다 보면 긴 세월은 저절로 흘러간다."`,
-        `"우리 모두는 인생에서 만회할 기회라 할 수 있는 큰 변화를 경험한다."`,
-        `"도전은 인생을 흥미롭게 만들며 도전의 극복이 인생을 의미있게 한다."`,
-        `"지나간 슬픔에 새로운 눈물을 낭비하지 말라."`,
-        `"성공은 열심히 노력하며 기다리는 사람에게 찾아온다."`,
-        `"때로는 살아있는 것조차도 용기가 될 때가 있다."`,
-        `"겨울이 없다면 봄은 그리 즐겁지 않을 것이다 고난을 맛보지 않으면 성공이 반갑지 않을 것이다."`,
+      const messages = [
+        "순간들을 소중히 여기다 보면 긴 세월은 저절로 흘러간다.",
+        "우리 모두는 인생에서 만회할 기회라 할 수 있는 큰 변화를 경험한다.",
+        "도전은 인생을 흥미롭게 만들며 도전의 극복이 인생을 의미있게 한다.",
+        "지나간 슬픔에 새로운 눈물을 낭비하지 말라.",
+        "성공은 열심히 노력하며 기다리는 사람에게 찾아온다.",
+        "때로는 살아있는 것조차도 용기가 될 때가 있다.",
+        "겨울이 없다면 봄은 그리 즐겁지 않을 것이다.",
       ];
 
-      let randomIndex = Math.floor(Math.random() * messages.length);
-      randomText.innerText = messages[randomIndex];
+      randomText.innerText =
+        messages[Math.floor(Math.random() * messages.length)];
 
-      let images = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg"];
-      let randomBg = Math.floor(Math.random() * images.length);
-      document.body.style.backgroundImage = `url("${images[randomBg]}")`;
+      const images = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg"];
+      document.body.style.backgroundImage = `url("${images[Math.floor(Math.random() * images.length)]}")`;
 
-      function clock() {
-        let date = new Date();
+      function showName() {
+        const saved = localStorage.getItem("name");
 
-        let hour = date.getHours();
-        let displayHour = hour % 12 || 12;
-
-        let hours = String(displayHour);
-        let minutes = String(date.getMinutes()).padStart(2, "0");
-
-        nowTime.innerText = `${hours}:${minutes}`;
-
-        if (hour >= 5 && hour < 12) {
-          hello.innerText = "Good Morning,";
-        } else if (hour >= 12 && hour < 18) {
-          hello.innerText = "Good Afternoon,";
-        } else if (hour >= 18 && hour < 22) {
-          hello.innerText = "Good Evening,";
+        if (saved) {
+          nameText.textContent = saved;
+          nameInput.style.display = "none";
+          nameText.style.display = "flex";
         } else {
-          hello.innerText = "Good Night,";
+          nameInput.style.display = "flex";
+          nameText.style.display = "none";
         }
       }
+
+      nameInput.addEventListener("input", () => {
+        localStorage.setItem("name", nameInput.value);
+      });
+
+      nameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          localStorage.setItem("name", nameInput.value);
+          showName();
+        }
+      });
+
+      nameText.addEventListener("click", () => {
+        nameInput.style.display = "flex";
+        nameInput.value = localStorage.getItem("name") || "";
+        nameText.style.display = "none";
+        nameInput.focus();
+      });
+
+      showName();
+
+      function showGoal() {
+        const saved = localStorage.getItem("goal");
+
+        if (saved) {
+          goalText.textContent = saved;
+          goalInput.classList.add("hidden");
+        } else {
+          goalText.textContent = "";
+          goalInput.classList.remove("hidden");
+        }
+      }
+
+      goalInput.addEventListener("input", () => {
+        localStorage.setItem("goal", goalInput.value);
+      });
+
+      goalInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          localStorage.setItem("goal", goalInput.value);
+          showGoal();
+        }
+      });
+
+      goalText.addEventListener("click", () => {
+        goalInput.classList.remove("hidden");
+        goalInput.value = localStorage.getItem("goal") || "";
+        goalText.textContent = "";
+        goalInput.focus();
+      });
+
+      showGoal();
+
+      function setTodo() {
+        localStorage.setItem("todo", todoInput.value);
+      }
+
+      function getTodo() {
+        todoText.textContent = localStorage.getItem("todo") || "";
+      }
+
+      todoInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          setTodo();
+          getTodo();
+          todoInput.value = "";
+        }
+      });
+
+      getTodo();
+
+      function clock() {
+        const date = new Date();
+        const h = date.getHours();
+        const m = String(date.getMinutes()).padStart(2, "0");
+
+        nowTime.innerText = `${h % 12 || 12}:${m}`;
+
+        hello.innerText =
+          h < 12
+            ? "Good Morning,"
+            : h < 18
+              ? "Good Afternoon,"
+              : h < 22
+                ? "Good Evening,"
+                : "Good Night,";
+      }
+
       clock();
       setInterval(clock, 1000);
     </script>
